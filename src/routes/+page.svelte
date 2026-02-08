@@ -4,6 +4,7 @@
   let isVisible = false;
   let copied = false;
   let copiedBrew = false;
+  let copiedHook = false;
 
   onMount(() => {
     isVisible = true;
@@ -20,10 +21,32 @@
     copiedBrew = true;
     setTimeout(() => copiedBrew = false, 2000);
   }
+
+  const hookConfig = `{
+  "hooks": {
+    "PreToolUse": [
+      {
+        "matcher": "Write|Edit|MultiEdit",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "clash check"
+          }
+        ]
+      }
+    ]
+  }
+}`;
+
+  function copyHookCommand() {
+    navigator.clipboard.writeText(hookConfig);
+    copiedHook = true;
+    setTimeout(() => copiedHook = false, 2000);
+  }
 </script>
 
 <svelte:head>
-  <title>Clash - Manage merge conflicts across git worktrees for parallel AI coding agents</title>
+  <title>Clash - Avoid merge conflicts across git worktrees for parallel AI coding agents</title>
 </svelte:head>
 
 <main class="min-h-screen bg-gradient-to-b from-gray-950 to-black text-gray-100">
@@ -170,6 +193,13 @@
             <div class="flex items-start gap-3">
               <span class="text-gray-400 text-xl">•</span>
               <div>
+                <strong>Guard file writes via hooks</strong>
+                <p class="text-sm text-gray-400">Automatic conflict check before every AI agent edit</p>
+              </div>
+            </div>
+            <div class="flex items-start gap-3">
+              <span class="text-gray-400 text-xl">•</span>
+              <div>
                 <strong>See conflicts instantly</strong>
                 <p class="text-sm text-gray-400">Across all active worktrees</p>
               </div>
@@ -191,8 +221,8 @@
             <div class="flex items-start gap-3">
               <span class="text-gray-400 text-xl">•</span>
               <div>
-                <strong>AI agent integration</strong>
-                <p class="text-sm text-gray-400">JSON output for automation</p>
+                <strong>Integrate with AI agents</strong>
+                <p class="text-sm text-gray-400">Via hooks, CLAUDE.md instructions, or JSON output</p>
               </div>
             </div>
           </div>
@@ -205,7 +235,7 @@
       <div class="container mx-auto px-6 max-w-6xl">
         <h2 class="text-3xl font-bold mb-8 text-center">See It In Action</h2>
 
-        <!-- Main Demo -->
+        <!-- Main Demo — Hook Integration -->
         <div class="mb-12">
           <div class="rounded-xl overflow-hidden border border-gray-800 bg-black">
             <div class="bg-gray-900 px-4 py-2 border-b border-gray-800">
@@ -213,22 +243,38 @@
                 <div class="w-3 h-3 rounded-full bg-red-500"></div>
                 <div class="w-3 h-3 rounded-full bg-yellow-500"></div>
                 <div class="w-3 h-3 rounded-full bg-green-500"></div>
-                <span class="ml-2 text-sm text-gray-400">Claude Code + Clash</span>
+                <span class="ml-2 text-sm text-gray-400">Claude Code + Clash Hook</span>
               </div>
             </div>
             <img
-              src="/demos/claude-using-clash-demo.gif"
-              alt="Clash with Claude Code"
+              src="/demos/clash-check-hook-demo.gif"
+              alt="Clash hook fires before Claude Code writes a conflicting file"
               class="w-full"
             />
           </div>
           <p class="text-center text-sm text-gray-500 mt-3">
-            Clash alerts Claude Code to conflicts in another worktree
+            Zero-config conflict detection — Clash prompts you before a conflicting edit goes through
           </p>
         </div>
 
         <!-- Demo Grid -->
         <div class="grid md:grid-cols-2 gap-6">
+          <div class="rounded-xl overflow-hidden border border-gray-800 bg-black">
+            <div class="bg-gray-900 px-4 py-2 border-b border-gray-800">
+              <div class="flex items-center gap-2">
+                <div class="w-3 h-3 rounded-full bg-red-500"></div>
+                <div class="w-3 h-3 rounded-full bg-yellow-500"></div>
+                <div class="w-3 h-3 rounded-full bg-green-500"></div>
+                <span class="ml-2 text-sm text-gray-400">Claude Code + Clash CLI</span>
+              </div>
+            </div>
+            <img
+              src="/demos/claude-using-clash-demo.gif"
+              alt="Clash alerts Claude Code to conflicts in another worktree"
+              class="w-full"
+            />
+          </div>
+
           <div class="rounded-xl overflow-hidden border border-gray-800 bg-black">
             <div class="bg-gray-900 px-4 py-2 border-b border-gray-800">
               <span class="text-sm text-gray-400">Status Command</span>
@@ -239,17 +285,18 @@
               class="w-full"
             />
           </div>
+        </div>
 
-          <div class="rounded-xl overflow-hidden border border-gray-800 bg-black">
-            <div class="bg-gray-900 px-4 py-2 border-b border-gray-800">
-              <span class="text-sm text-gray-400">Watch Mode</span>
-            </div>
-            <img
-              src="/demos/clash-watch-realtime-demo.gif"
-              alt="Watch mode"
-              class="w-full"
-            />
+        <!-- Watch Mode -->
+        <div class="mt-6 rounded-xl overflow-hidden border border-gray-800 bg-black">
+          <div class="bg-gray-900 px-4 py-2 border-b border-gray-800">
+            <span class="text-sm text-gray-400">Watch Mode</span>
           </div>
+          <img
+            src="/demos/clash-watch-realtime-demo.gif"
+            alt="Watch mode"
+            class="w-full"
+          />
         </div>
 
         <!-- Conflict Matrix Preview -->
@@ -301,8 +348,12 @@
           <h3 class="font-semibold mb-4">Basic Commands</h3>
           <div class="space-y-3 font-mono text-sm">
             <div>
+              <span class="text-gray-500">$</span> clash check src/main.rs
+              <span class="text-gray-500 ml-4"># Check a single file</span>
+            </div>
+            <div>
               <span class="text-gray-500">$</span> clash status
-              <span class="text-gray-500 ml-4"># Check conflicts</span>
+              <span class="text-gray-500 ml-4"># Conflict matrix</span>
             </div>
             <div>
               <span class="text-gray-500">$</span> clash status --json
@@ -322,20 +373,41 @@
       <div class="container mx-auto px-6 max-w-4xl">
         <h2 class="text-3xl font-bold mb-8 text-center">AI Agent Integration</h2>
 
+        <!-- Claude Code Hook (Recommended) -->
         <div class="bg-gray-900 rounded-xl p-8 border border-gray-800">
-          <h3 class="font-semibold mb-4">For Claude Code / Cursor / Windsurf</h3>
+          <h3 class="font-semibold mb-2">Claude Code — Hook Integration (Recommended)</h3>
           <p class="text-gray-400 mb-4">
-            Add to your <code class="bg-gray-800 px-2 py-1 rounded text-sm">.claude.md</code> files:
+            Add the <code class="bg-gray-800 px-2 py-1 rounded text-sm">hooks</code> key to your
+            <code class="bg-gray-800 px-2 py-1 rounded text-sm">.claude/settings.json</code>
+            — Clash fires automatically before every Write/Edit:
           </p>
 
-          <div class="bg-black/50 rounded-lg p-4 text-sm">
-            <p class="mb-3">After each commit, run <code class="text-gray-300">clash status --json</code> to check for conflicts.</p>
-            <p class="mb-3">If conflicts are detected:</p>
-            <ol class="list-decimal list-inside space-y-1 ml-4 text-gray-400">
-              <li>Review the conflicting worktree's changes</li>
-              <li>Adapt your implementation to work with their changes</li>
-              <li>Prevent wasted work from incompatible changes</li>
-            </ol>
+          <div class="relative">
+            <pre class="bg-black/50 rounded-lg p-4 text-sm text-gray-300 overflow-x-auto font-mono"><code>{hookConfig}</code></pre>
+            <button
+              on:click={copyHookCommand}
+              class="absolute top-3 right-3 px-3 py-1.5 bg-gray-800 hover:bg-gray-700 rounded-lg transition-colors text-xs"
+            >
+              {copiedHook ? 'Copied' : 'Copy'}
+            </button>
+          </div>
+
+          <p class="text-sm text-gray-500 mt-3">
+            That's it. Clash will prompt you whenever Claude tries to edit a file that conflicts with another worktree.
+          </p>
+        </div>
+
+        <!-- Other Agents (Manual) -->
+        <div class="mt-6 bg-gray-900 rounded-xl p-8 border border-gray-800">
+          <h3 class="font-semibold mb-2">Codex / Cursor / Windsurf / Other Agents</h3>
+          <p class="text-gray-400 mb-4">
+            If hooks aren't available, add to your project instructions
+            (<code class="bg-gray-800 px-2 py-1 rounded text-sm">.cursorrules</code>, etc.):
+          </p>
+
+          <div class="bg-black/50 rounded-lg p-4 text-sm text-gray-400 font-mono space-y-2">
+            <p>IMPORTANT: Before editing any file, run <code class="text-gray-300">`clash check &lt;file&gt;`</code> to check for merge conflicts with other worktrees. If conflicts are detected, examine the conflicting files and adapt your approach to avoid or minimize them.</p>
+            <p>Run <code class="text-gray-300">`clash status`</code> periodically (especially before and after commits) to get a full conflict overview across all worktrees.</p>
           </div>
         </div>
 
@@ -343,9 +415,12 @@
         <div class="mt-8 rounded-xl overflow-hidden border border-gray-800">
           <img
             src="/demos/multi-agent-clash-demo-v1.gif"
-            alt="Multiple agents"
+            alt="Multiple agents working with Clash"
             class="w-full"
           />
+          <p class="text-center text-sm text-gray-500 mt-3">
+            Multiple AI agents coordinating across worktrees with Clash
+          </p>
         </div>
       </div>
     </section>
