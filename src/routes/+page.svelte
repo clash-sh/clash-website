@@ -342,29 +342,6 @@
             </code>
           </div>
         </div>
-
-        <!-- Basic Commands -->
-        <div class="mt-8 bg-gray-900/50 rounded-xl p-6 border border-gray-800">
-          <h3 class="font-semibold mb-4">Basic Commands</h3>
-          <div class="space-y-3 font-mono text-sm">
-            <div>
-              <span class="text-gray-500">$</span> clash check src/main.rs
-              <span class="text-gray-500 ml-4"># Check a single file</span>
-            </div>
-            <div>
-              <span class="text-gray-500">$</span> clash status
-              <span class="text-gray-500 ml-4"># Conflict matrix</span>
-            </div>
-            <div>
-              <span class="text-gray-500">$</span> clash status --json
-              <span class="text-gray-500 ml-4"># JSON for AI agents</span>
-            </div>
-            <div>
-              <span class="text-gray-500">$</span> clash watch
-              <span class="text-gray-500 ml-4"># Real-time monitoring</span>
-            </div>
-          </div>
-        </div>
       </div>
     </section>
 
@@ -421,6 +398,34 @@
           <p class="text-center text-base text-gray-400 mt-3">
             Multiple AI agents coordinating across worktrees with Clash
           </p>
+        </div>
+      </div>
+    </section>
+
+    <!-- Basic Commands -->
+    <section class="py-16">
+      <div class="container mx-auto px-6 max-w-4xl">
+        <h2 class="text-3xl font-bold mb-8 text-center">Basic Commands</h2>
+
+        <div class="bg-gray-900/50 rounded-xl p-6 border border-gray-800">
+          <div class="space-y-3 font-mono text-sm">
+            <div>
+              <span class="text-gray-500">$</span> clash check src/main.rs
+              <span class="text-gray-500 ml-4"># Check a single file</span>
+            </div>
+            <div>
+              <span class="text-gray-500">$</span> clash status
+              <span class="text-gray-500 ml-4"># Conflict matrix</span>
+            </div>
+            <div>
+              <span class="text-gray-500">$</span> clash status --json
+              <span class="text-gray-500 ml-4"># JSON for AI agents</span>
+            </div>
+            <div>
+              <span class="text-gray-500">$</span> clash watch
+              <span class="text-gray-500 ml-4"># Real-time monitoring</span>
+            </div>
+          </div>
         </div>
       </div>
     </section>
