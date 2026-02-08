@@ -5,9 +5,16 @@
   let copied = false;
   let copiedBrew = false;
   let copiedHook = false;
+  let scrolled = false;
 
   onMount(() => {
     isVisible = true;
+
+    const onScroll = () => {
+      scrolled = window.scrollY > 400;
+    };
+    window.addEventListener('scroll', onScroll, { passive: true });
+    return () => window.removeEventListener('scroll', onScroll);
   });
 
   function copyInstallCommand() {
@@ -48,6 +55,28 @@
 <svelte:head>
   <title>Clash - Avoid merge conflicts across git worktrees for parallel AI coding agents</title>
 </svelte:head>
+
+<!-- Sticky Navigation -->
+{#if scrolled}
+<nav class="fixed top-0 left-0 right-0 z-50 bg-gray-950/80 backdrop-blur-lg border-b border-gray-800/50 animate-slide-up">
+  <div class="container mx-auto px-6 h-12 flex items-center justify-between">
+    <!-- svelte-ignore a11y-invalid-attribute -->
+    <a href="#" class="flex items-center gap-2">
+      <img src="/logo.png" alt="Clash" class="w-6 h-6" />
+      <span class="font-semibold text-sm text-white">Clash</span>
+    </a>
+    <div class="hidden sm:flex items-center gap-5 text-sm text-gray-400">
+      <a href="#demos" class="hover:text-white transition">Demos</a>
+      <a href="#install" class="hover:text-white transition">Install</a>
+      <a href="#ai-integration" class="hover:text-white transition">AI Integration</a>
+      <a href="#commands" class="hover:text-white transition">Commands</a>
+      <a href="#use-cases" class="hover:text-white transition">Use Cases</a>
+      <a href="#how-it-works" class="hover:text-white transition">How It Works</a>
+      <a href="#faq" class="hover:text-white transition">FAQ</a>
+    </div>
+  </div>
+</nav>
+{/if}
 
 <main class="min-h-screen bg-gradient-to-b from-gray-950 to-black text-gray-100">
   {#if isVisible}
@@ -191,35 +220,56 @@
 
           <div class="grid md:grid-cols-2 gap-4 mt-6">
             <div class="flex items-start gap-3">
-              <span class="text-gray-400 text-xl">•</span>
+              <div class="w-8 h-8 rounded-lg bg-purple-500/10 border border-purple-500/20 flex items-center justify-center flex-shrink-0 mt-0.5">
+                <svg class="w-4 h-4 text-purple-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z" />
+                </svg>
+              </div>
               <div>
                 <strong>Guard file writes via hooks</strong>
                 <p class="text-sm text-gray-400">Automatic conflict check before every AI agent edit</p>
               </div>
             </div>
             <div class="flex items-start gap-3">
-              <span class="text-gray-400 text-xl">•</span>
+              <div class="w-8 h-8 rounded-lg bg-amber-500/10 border border-amber-500/20 flex items-center justify-center flex-shrink-0 mt-0.5">
+                <svg class="w-4 h-4 text-amber-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z" />
+                </svg>
+              </div>
               <div>
                 <strong>See conflicts instantly</strong>
                 <p class="text-sm text-gray-400">Across all active worktrees</p>
               </div>
             </div>
             <div class="flex items-start gap-3">
-              <span class="text-gray-400 text-xl">•</span>
+              <div class="w-8 h-8 rounded-lg bg-cyan-500/10 border border-cyan-500/20 flex items-center justify-center flex-shrink-0 mt-0.5">
+                <svg class="w-4 h-4 text-cyan-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2V6zM14 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2V6zM4 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2v-2zM14 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2v-2z" />
+                </svg>
+              </div>
               <div>
                 <strong>Visualize conflict matrix</strong>
                 <p class="text-sm text-gray-400">See which branches conflict</p>
               </div>
             </div>
             <div class="flex items-start gap-3">
-              <span class="text-gray-400 text-xl">•</span>
+              <div class="w-8 h-8 rounded-lg bg-green-500/10 border border-green-500/20 flex items-center justify-center flex-shrink-0 mt-0.5">
+                <svg class="w-4 h-4 text-green-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" />
+                </svg>
+              </div>
               <div>
                 <strong>Monitor in real-time</strong>
                 <p class="text-sm text-gray-400">As files change</p>
               </div>
             </div>
             <div class="flex items-start gap-3">
-              <span class="text-gray-400 text-xl">•</span>
+              <div class="w-8 h-8 rounded-lg bg-blue-500/10 border border-blue-500/20 flex items-center justify-center flex-shrink-0 mt-0.5">
+                <svg class="w-4 h-4 text-blue-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 4a2 2 0 114 0v1a1 1 0 001 1h3a1 1 0 011 1v3a1 1 0 01-1 1h-1a2 2 0 100 4h1a1 1 0 011 1v3a1 1 0 01-1 1h-3a1 1 0 01-1-1v-1a2 2 0 10-4 0v1a1 1 0 01-1 1H7a1 1 0 01-1-1v-3a1 1 0 00-1-1H4a2 2 0 110-4h1a1 1 0 001-1V7a1 1 0 011-1h3a1 1 0 001-1V4z" />
+                </svg>
+              </div>
               <div>
                 <strong>Integrate with AI agents</strong>
                 <p class="text-sm text-gray-400">Via hooks, CLAUDE.md instructions, or JSON output</p>
@@ -315,28 +365,50 @@
     </section>
 
     <!-- Installation -->
-    <section class="py-16">
+    <section id="install" class="py-16">
       <div class="container mx-auto px-6 max-w-4xl">
         <h2 class="text-3xl font-bold mb-8 text-center">Installation Options</h2>
 
         <div class="grid md:grid-cols-3 gap-4">
-          <div class="bg-gray-900 rounded-lg p-6 border border-gray-800">
-            <h3 class="font-semibold mb-3">Quick Install</h3>
+          <div class="bg-gray-900 rounded-lg p-6 border border-gray-800 hover:border-cyan-800/50 transition-colors">
+            <div class="flex items-center gap-3 mb-3">
+              <div class="w-8 h-8 rounded-lg bg-cyan-500/10 border border-cyan-500/20 flex items-center justify-center">
+                <svg class="w-4 h-4 text-cyan-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z" />
+                </svg>
+              </div>
+              <h3 class="font-semibold">Quick Install</h3>
+            </div>
             <code class="text-xs bg-black/50 px-3 py-2 rounded block text-gray-300">
               curl -fsSL https://clash.sh/install.sh | sh
             </code>
           </div>
 
-          <div class="bg-gray-900 rounded-lg p-6 border border-gray-800">
-            <h3 class="font-semibold mb-3">Homebrew</h3>
+          <div class="bg-gray-900 rounded-lg p-6 border border-gray-800 hover:border-amber-800/50 transition-colors">
+            <div class="flex items-center gap-3 mb-3">
+              <div class="w-8 h-8 rounded-lg bg-amber-500/10 border border-amber-500/20 flex items-center justify-center">
+                <svg class="w-4 h-4 text-amber-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4" />
+                </svg>
+              </div>
+              <h3 class="font-semibold">Homebrew</h3>
+            </div>
             <code class="text-xs bg-black/50 px-3 py-2 rounded block text-gray-300">
               brew tap clash-sh/tap<br/>
               brew install clash
             </code>
           </div>
 
-          <div class="bg-gray-900 rounded-lg p-6 border border-gray-800">
-            <h3 class="font-semibold mb-3">Cargo</h3>
+          <div class="bg-gray-900 rounded-lg p-6 border border-gray-800 hover:border-orange-800/50 transition-colors">
+            <div class="flex items-center gap-3 mb-3">
+              <div class="w-8 h-8 rounded-lg bg-orange-500/10 border border-orange-500/20 flex items-center justify-center">
+                <svg class="w-4 h-4 text-orange-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.066 2.573c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.573 1.066c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.066-2.573c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z" />
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
+                </svg>
+              </div>
+              <h3 class="font-semibold">Cargo</h3>
+            </div>
             <code class="text-xs bg-black/50 px-3 py-2 rounded block text-gray-300">
               cargo install clash-sh
             </code>
@@ -346,7 +418,7 @@
     </section>
 
     <!-- AI Integration -->
-    <section class="py-16 bg-gray-950/50">
+    <section id="ai-integration" class="py-16 bg-gray-950/50">
       <div class="container mx-auto px-6 max-w-4xl">
         <h2 class="text-3xl font-bold mb-8 text-center">AI Agent Integration</h2>
 
@@ -360,7 +432,21 @@
           </p>
 
           <div class="relative">
-            <pre class="bg-black/50 rounded-lg p-4 text-sm text-gray-300 overflow-x-auto font-mono"><code>{hookConfig}</code></pre>
+            <pre class="bg-black/50 rounded-lg p-4 text-sm overflow-x-auto font-mono"><code><span class="text-gray-500">&#123;</span>
+  <span class="text-purple-400">"hooks"</span><span class="text-gray-500">:</span> <span class="text-gray-500">&#123;</span>
+    <span class="text-purple-400">"PreToolUse"</span><span class="text-gray-500">:</span> <span class="text-gray-500">[</span>
+      <span class="text-gray-500">&#123;</span>
+        <span class="text-purple-400">"matcher"</span><span class="text-gray-500">:</span> <span class="text-green-400">"Write|Edit|MultiEdit"</span><span class="text-gray-500">,</span>
+        <span class="text-purple-400">"hooks"</span><span class="text-gray-500">:</span> <span class="text-gray-500">[</span>
+          <span class="text-gray-500">&#123;</span>
+            <span class="text-purple-400">"type"</span><span class="text-gray-500">:</span> <span class="text-green-400">"command"</span><span class="text-gray-500">,</span>
+            <span class="text-purple-400">"command"</span><span class="text-gray-500">:</span> <span class="text-green-400">"clash check"</span>
+          <span class="text-gray-500">&#125;</span>
+        <span class="text-gray-500">]</span>
+      <span class="text-gray-500">&#125;</span>
+    <span class="text-gray-500">]</span>
+  <span class="text-gray-500">&#125;</span>
+<span class="text-gray-500">&#125;</span></code></pre>
             <button
               on:click={copyHookCommand}
               class="absolute top-3 right-3 px-3 py-1.5 bg-gray-800 hover:bg-gray-700 rounded-lg transition-colors text-xs"
@@ -372,6 +458,41 @@
           <p class="text-sm text-gray-500 mt-3">
             That's it. Clash will prompt you whenever Claude tries to edit a file that conflicts with another worktree.
           </p>
+        </div>
+
+        <!-- What Your Agent Sees -->
+        <div class="mt-6 bg-gray-900 rounded-xl p-8 border border-gray-800">
+          <h3 class="font-semibold mb-2">What Your Agent Sees</h3>
+          <p class="text-gray-400 mb-4">
+            When conflicts are detected, <code class="bg-gray-800 px-2 py-1 rounded text-sm">clash check</code> returns structured JSON:
+          </p>
+
+          <div class="rounded-xl overflow-hidden border border-gray-800 bg-black">
+            <div class="bg-gray-900 px-4 py-2 border-b border-gray-800">
+              <div class="flex items-center gap-2">
+                <div class="w-3 h-3 rounded-full bg-red-500"></div>
+                <div class="w-3 h-3 rounded-full bg-yellow-500"></div>
+                <div class="w-3 h-3 rounded-full bg-green-500"></div>
+                <span class="ml-2 text-sm text-gray-400">clash check src/main.rs</span>
+              </div>
+            </div>
+            <pre class="p-4 text-sm overflow-x-auto font-mono"><code><span class="text-gray-500">&#123;</span>
+  <span class="text-purple-400">"file"</span><span class="text-gray-500">:</span> <span class="text-green-400">"src/main.rs"</span><span class="text-gray-500">,</span>
+  <span class="text-purple-400">"has_conflicts"</span><span class="text-gray-500">:</span> <span class="text-amber-400">true</span><span class="text-gray-500">,</span>
+  <span class="text-purple-400">"conflicts"</span><span class="text-gray-500">:</span> <span class="text-gray-500">[</span>
+    <span class="text-gray-500">&#123;</span>
+      <span class="text-purple-400">"worktree"</span><span class="text-gray-500">:</span> <span class="text-green-400">"feature/auth"</span><span class="text-gray-500">,</span>
+      <span class="text-purple-400">"conflicting_files"</span><span class="text-gray-500">:</span> <span class="text-gray-500">[</span><span class="text-green-400">"src/main.rs"</span><span class="text-gray-500">,</span> <span class="text-green-400">"src/lib.rs"</span><span class="text-gray-500">]</span>
+    <span class="text-gray-500">&#125;</span>
+  <span class="text-gray-500">]</span>
+<span class="text-gray-500">&#125;</span></code></pre>
+          </div>
+
+          <div class="mt-4 flex flex-wrap gap-3 text-xs font-mono">
+            <span class="bg-green-950/50 text-green-400 px-3 py-1.5 rounded-lg border border-green-900/50">Exit 0 — no conflicts</span>
+            <span class="bg-amber-950/50 text-amber-400 px-3 py-1.5 rounded-lg border border-amber-900/50">Exit 2 — conflicts found</span>
+            <span class="bg-red-950/50 text-red-400 px-3 py-1.5 rounded-lg border border-red-900/50">Exit 1 — error</span>
+          </div>
         </div>
 
         <!-- Other Agents (Manual) -->
@@ -403,27 +524,145 @@
     </section>
 
     <!-- Basic Commands -->
-    <section class="py-16">
+    <section id="commands" class="py-16">
       <div class="container mx-auto px-6 max-w-4xl">
         <h2 class="text-3xl font-bold mb-8 text-center">Basic Commands</h2>
 
-        <div class="bg-gray-900/50 rounded-xl p-6 border border-gray-800">
-          <div class="space-y-3 font-mono text-sm">
-            <div>
-              <span class="text-gray-500">$</span> clash check src/main.rs
-              <span class="text-gray-500 ml-4"># Check a single file</span>
+        <div class="rounded-xl overflow-hidden border border-gray-800">
+          <div class="bg-gray-900 px-4 py-2 border-b border-gray-800">
+            <div class="flex items-center gap-2">
+              <div class="w-3 h-3 rounded-full bg-red-500"></div>
+              <div class="w-3 h-3 rounded-full bg-yellow-500"></div>
+              <div class="w-3 h-3 rounded-full bg-green-500"></div>
+              <span class="ml-2 text-sm text-gray-400">Terminal</span>
             </div>
-            <div>
-              <span class="text-gray-500">$</span> clash status
-              <span class="text-gray-500 ml-4"># Conflict matrix</span>
+          </div>
+          <div class="bg-black/80 p-6">
+            <div class="space-y-1 font-mono text-sm">
+              <div class="group flex items-baseline gap-0 py-1.5 px-2 rounded hover:bg-gray-900/50 transition-colors">
+                <span class="text-green-500">$</span>
+                <span class="ml-2 text-gray-300 group-hover:text-white transition-colors">clash check src/main.rs</span>
+                <span class="text-gray-600 ml-4"># Check a single file</span>
+              </div>
+              <div class="group flex items-baseline gap-0 py-1.5 px-2 rounded hover:bg-gray-900/50 transition-colors">
+                <span class="text-green-500">$</span>
+                <span class="ml-2 text-gray-300 group-hover:text-white transition-colors">clash status</span>
+                <span class="text-gray-600 ml-4"># Conflict matrix</span>
+              </div>
+              <div class="group flex items-baseline gap-0 py-1.5 px-2 rounded hover:bg-gray-900/50 transition-colors">
+                <span class="text-green-500">$</span>
+                <span class="ml-2 text-gray-300 group-hover:text-white transition-colors">clash status --json</span>
+                <span class="text-gray-600 ml-4"># JSON for AI agents</span>
+              </div>
+              <div class="group flex items-baseline gap-0 py-1.5 px-2 rounded hover:bg-gray-900/50 transition-colors">
+                <span class="text-green-500">$</span>
+                <span class="ml-2 text-gray-300 group-hover:text-white transition-colors">clash watch</span>
+                <span class="text-gray-600 ml-4"># Real-time monitoring</span>
+              </div>
             </div>
-            <div>
-              <span class="text-gray-500">$</span> clash status --json
-              <span class="text-gray-500 ml-4"># JSON for AI agents</span>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Use Cases -->
+    <section id="use-cases" class="py-16 bg-gray-950/50">
+      <div class="container mx-auto px-6 max-w-4xl">
+        <h2 class="text-3xl font-bold mb-8 text-center">Use Cases</h2>
+
+        <div class="space-y-6">
+          <!-- AI Agent Orchestrators -->
+          <div class="bg-gray-900/50 rounded-xl p-6 border border-gray-800">
+            <div class="flex items-start gap-4 mb-4">
+              <div class="w-10 h-10 rounded-lg bg-purple-500/10 border border-purple-500/20 flex items-center justify-center flex-shrink-0">
+                <svg class="w-5 h-5 text-purple-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9.75 17L9 20l-1 1h8l-1-1-.75-3M3 13h18M5 17h14a2 2 0 002-2V5a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
+                </svg>
+              </div>
+              <div>
+                <h3 class="font-semibold text-lg">AI Agent Orchestrators</h3>
+                <p class="text-sm text-gray-400 mt-1">Route agents around conflicts using JSON output</p>
+              </div>
             </div>
-            <div>
-              <span class="text-gray-500">$</span> clash watch
-              <span class="text-gray-500 ml-4"># Real-time monitoring</span>
+            <div class="rounded-xl overflow-hidden border border-gray-800">
+              <div class="bg-gray-900 px-4 py-2 border-b border-gray-800">
+                <div class="flex items-center gap-2">
+                  <div class="w-3 h-3 rounded-full bg-red-500"></div>
+                  <div class="w-3 h-3 rounded-full bg-yellow-500"></div>
+                  <div class="w-3 h-3 rounded-full bg-green-500"></div>
+                  <span class="ml-2 text-sm text-gray-400">orchestrator.sh</span>
+                </div>
+              </div>
+              <pre class="bg-black/80 p-4 text-sm overflow-x-auto font-mono"><code><span class="text-gray-500"># Query conflicts as structured data</span>
+<span class="text-green-400">conflicts</span><span class="text-gray-300">=$(</span><span class="text-gray-300">clash status --json | jq '.conflicts'</span><span class="text-gray-300">)</span>
+
+<span class="text-purple-400">if</span> <span class="text-gray-300">[ "$conflicts" != "[]" ]; </span><span class="text-purple-400">then</span>
+  <span class="text-gray-500"># Re-assign agent to non-conflicting files</span>
+  <span class="text-gray-300">reassign_agent "$conflicts"</span>
+<span class="text-purple-400">fi</span></code></pre>
+            </div>
+          </div>
+
+          <!-- Human Teams -->
+          <div class="bg-gray-900/50 rounded-xl p-6 border border-gray-800">
+            <div class="flex items-start gap-4 mb-4">
+              <div class="w-10 h-10 rounded-lg bg-blue-500/10 border border-blue-500/20 flex items-center justify-center flex-shrink-0">
+                <svg class="w-5 h-5 text-blue-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0z" />
+                </svg>
+              </div>
+              <div>
+                <h3 class="font-semibold text-lg">Human Teams</h3>
+                <p class="text-sm text-gray-400 mt-1">Catch conflicts before they reach your PR</p>
+              </div>
+            </div>
+            <div class="rounded-xl overflow-hidden border border-gray-800">
+              <div class="bg-gray-900 px-4 py-2 border-b border-gray-800">
+                <div class="flex items-center gap-2">
+                  <div class="w-3 h-3 rounded-full bg-red-500"></div>
+                  <div class="w-3 h-3 rounded-full bg-yellow-500"></div>
+                  <div class="w-3 h-3 rounded-full bg-green-500"></div>
+                  <span class="ml-2 text-sm text-gray-400">.git/hooks/pre-commit</span>
+                </div>
+              </div>
+              <pre class="bg-black/80 p-4 text-sm overflow-x-auto font-mono"><code><span class="text-gray-500">#!/bin/bash</span>
+<span class="text-gray-500"># Block commits that would conflict</span>
+<span class="text-purple-400">if</span> <span class="text-gray-300">! clash status --quiet; </span><span class="text-purple-400">then</span>
+  <span class="text-gray-300">echo </span><span class="text-green-400">"Conflicts detected. Run 'clash status' for details."</span>
+  <span class="text-purple-400">exit</span> <span class="text-amber-400">1</span>
+<span class="text-purple-400">fi</span></code></pre>
+            </div>
+          </div>
+
+          <!-- CI/CD Pipelines -->
+          <div class="bg-gray-900/50 rounded-xl p-6 border border-gray-800">
+            <div class="flex items-start gap-4 mb-4">
+              <div class="w-10 h-10 rounded-lg bg-orange-500/10 border border-orange-500/20 flex items-center justify-center flex-shrink-0">
+                <svg class="w-5 h-5 text-orange-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" />
+                </svg>
+              </div>
+              <div>
+                <h3 class="font-semibold text-lg">CI/CD Pipelines</h3>
+                <p class="text-sm text-gray-400 mt-1">Fail early when branches would conflict on merge</p>
+              </div>
+            </div>
+            <div class="rounded-xl overflow-hidden border border-gray-800">
+              <div class="bg-gray-900 px-4 py-2 border-b border-gray-800">
+                <div class="flex items-center gap-2">
+                  <div class="w-3 h-3 rounded-full bg-red-500"></div>
+                  <div class="w-3 h-3 rounded-full bg-yellow-500"></div>
+                  <div class="w-3 h-3 rounded-full bg-green-500"></div>
+                  <span class="ml-2 text-sm text-gray-400">.github/workflows/conflicts.yml</span>
+                </div>
+              </div>
+              <pre class="bg-black/80 p-4 text-sm overflow-x-auto font-mono"><code><span class="text-purple-400">name</span><span class="text-gray-500">:</span> <span class="text-green-400">Conflict Check</span>
+<span class="text-purple-400">on</span><span class="text-gray-500">:</span> <span class="text-gray-500">[</span><span class="text-green-400">pull_request</span><span class="text-gray-500">]</span>
+<span class="text-purple-400">jobs</span><span class="text-gray-500">:</span>
+  <span class="text-purple-400">check</span><span class="text-gray-500">:</span>
+    <span class="text-purple-400">runs-on</span><span class="text-gray-500">:</span> <span class="text-green-400">ubuntu-latest</span>
+    <span class="text-purple-400">steps</span><span class="text-gray-500">:</span>
+      <span class="text-gray-500">-</span> <span class="text-purple-400">run</span><span class="text-gray-500">:</span> <span class="text-green-400">clash status --quiet</span></code></pre>
             </div>
           </div>
         </div>
@@ -431,7 +670,7 @@
     </section>
 
     <!-- How It Works -->
-    <section class="py-16">
+    <section id="how-it-works" class="py-16">
       <div class="container mx-auto px-6 max-w-4xl">
         <h2 class="text-3xl font-bold mb-8 text-center">How It Works</h2>
 
@@ -444,14 +683,14 @@
           <div class="grid md:grid-cols-2 gap-6">
             <div class="space-y-4">
               <div class="flex gap-3">
-                <span class="text-gray-500">1.</span>
+                <span class="w-7 h-7 rounded-full bg-purple-500/15 border border-purple-500/30 flex items-center justify-center text-purple-400 text-sm font-semibold flex-shrink-0">1</span>
                 <div>
                   <strong>Discovers worktrees</strong>
                   <p class="text-sm text-gray-400">Main + all linked worktrees</p>
                 </div>
               </div>
               <div class="flex gap-3">
-                <span class="text-gray-500">2.</span>
+                <span class="w-7 h-7 rounded-full bg-blue-500/15 border border-blue-500/30 flex items-center justify-center text-blue-400 text-sm font-semibold flex-shrink-0">2</span>
                 <div>
                   <strong>Finds merge base</strong>
                   <p class="text-sm text-gray-400">For each worktree pair</p>
@@ -461,14 +700,14 @@
 
             <div class="space-y-4">
               <div class="flex gap-3">
-                <span class="text-gray-500">3.</span>
+                <span class="w-7 h-7 rounded-full bg-cyan-500/15 border border-cyan-500/30 flex items-center justify-center text-cyan-400 text-sm font-semibold flex-shrink-0">3</span>
                 <div>
                   <strong>Simulates merge</strong>
                   <p class="text-sm text-gray-400">Detects conflicts in memory</p>
                 </div>
               </div>
               <div class="flex gap-3">
-                <span class="text-gray-500">4.</span>
+                <span class="w-7 h-7 rounded-full bg-green-500/15 border border-green-500/30 flex items-center justify-center text-green-400 text-sm font-semibold flex-shrink-0">4</span>
                 <div>
                   <strong>Reports conflicts</strong>
                   <p class="text-sm text-gray-400">Shows conflicting files</p>
@@ -480,6 +719,29 @@
           <div class="mt-6 p-4 bg-gray-900/30 rounded-lg border border-gray-800">
             <p class="text-center text-gray-300 font-semibold">
               Runs 100% locally · No data leaves your machine · Read-only operations
+            </p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- FAQ -->
+    <section id="faq" class="py-16 bg-gray-950/50">
+      <div class="container mx-auto px-6 max-w-4xl">
+        <h2 class="text-3xl font-bold mb-8 text-center">FAQ</h2>
+
+        <div class="space-y-4">
+          <div class="bg-gray-900/50 rounded-xl p-6 border border-gray-800">
+            <h3 class="font-semibold text-lg mb-2">Does Clash modify my repository?</h3>
+            <p class="text-gray-400">
+              Never. Clash is 100% read-only. It uses <code class="bg-gray-800 px-2 py-1 rounded text-sm">git merge-tree</code> to simulate merges in memory without touching your working directory, staging area, or any git refs.
+            </p>
+          </div>
+
+          <div class="bg-gray-900/50 rounded-xl p-6 border border-gray-800">
+            <h3 class="font-semibold text-lg mb-2">Can it resolve conflicts automatically?</h3>
+            <p class="text-gray-400">
+              Not yet — Clash focuses on early detection so you can adjust course before conflicts grow. Automatic resolution is on the roadmap but conflict prevention is often more valuable than conflict resolution.
             </p>
           </div>
         </div>
@@ -513,10 +775,9 @@
 
         <div class="text-center text-sm text-gray-500 mt-8">
           <div class="mb-2">
-            <span class="text-gray-400">Free Forever</span> ·
-            <span class="text-gray-400">100% Local</span> ·
-            <span class="text-gray-400">MIT License</span> ·
-            <span class="text-gray-400">Built with Rust</span>
+            <span class="text-blue-400/70">100% Local</span> ·
+            <span class="text-purple-400/70">MIT License</span> ·
+            <span class="text-orange-400/70">Built with Rust</span>
           </div>
           <div>Made with ❤️ and Claude</div>
         </div>
