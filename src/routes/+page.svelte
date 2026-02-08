@@ -249,6 +249,20 @@
           </p>
         </div>
 
+        <!-- Conflict Warning Screenshot -->
+        <div class="mb-12">
+          <div class="rounded-xl overflow-hidden border border-gray-800 bg-black">
+            <img
+              src="/demos/clash-hook-conflict-warning.png"
+              alt="Clash warns about merge conflicts with multiple worktrees"
+              class="w-full"
+            />
+          </div>
+          <p class="text-center text-base text-gray-400 mt-3">
+            Clash surfaces a clear warning when a file has conflicts with multiple worktrees
+          </p>
+        </div>
+
         <!-- Demo Grid -->
         <div class="grid md:grid-cols-2 gap-6">
           <div class="rounded-xl overflow-hidden border border-gray-800 bg-black">
