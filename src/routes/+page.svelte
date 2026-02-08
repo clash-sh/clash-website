@@ -5,6 +5,7 @@
   let copied = false;
   let copiedBrew = false;
   let copiedHook = false;
+  let copiedPlugin = false;
   let scrolled = false;
 
   onMount(() => {
@@ -49,6 +50,12 @@
     navigator.clipboard.writeText(hookConfig);
     copiedHook = true;
     setTimeout(() => copiedHook = false, 2000);
+  }
+
+  function copyPluginCommand() {
+    navigator.clipboard.writeText('claude plugin marketplace add clash-sh/clash && claude plugin install clash@clash-sh');
+    copiedPlugin = true;
+    setTimeout(() => copiedPlugin = false, 2000);
   }
 </script>
 
@@ -422,13 +429,35 @@
       <div class="container mx-auto px-6 max-w-4xl">
         <h2 class="text-3xl font-bold mb-8 text-center">AI Agent Integration</h2>
 
-        <!-- Claude Code Hook (Recommended) -->
+        <!-- Claude Code Plugin (Recommended) -->
         <div class="bg-gray-900 rounded-xl p-8 border border-gray-800">
-          <h3 class="font-semibold mb-2">Claude Code — Hook Integration (Recommended)</h3>
+          <h3 class="font-semibold mb-2">Claude Code — Plugin (Recommended)</h3>
           <p class="text-gray-400 mb-4">
-            Add the <code class="bg-gray-800 px-2 py-1 rounded text-sm">hooks</code> key to your
-            <code class="bg-gray-800 px-2 py-1 rounded text-sm">.claude/settings.json</code>
-            — Clash fires automatically before every Write/Edit:
+            Install the Clash plugin — it automatically checks for conflicts before every Write/Edit:
+          </p>
+
+          <div class="relative">
+            <pre class="bg-black/50 rounded-lg p-4 text-sm overflow-x-auto font-mono"><code><span class="text-green-500">$</span> <span class="text-gray-300">claude plugin marketplace add clash-sh/clash</span>
+<span class="text-green-500">$</span> <span class="text-gray-300">claude plugin install clash@clash-sh</span></code></pre>
+            <button
+              on:click={copyPluginCommand}
+              class="absolute top-3 right-3 px-3 py-1.5 bg-gray-800 hover:bg-gray-700 rounded-lg transition-colors text-xs"
+            >
+              {copiedPlugin ? 'Copied' : 'Copy'}
+            </button>
+          </div>
+
+          <p class="text-sm text-gray-500 mt-3">
+            That's it. Clash will prompt you whenever Claude tries to edit a file that conflicts with another worktree.
+          </p>
+        </div>
+
+        <!-- Manual Hook (Alternative) -->
+        <div class="mt-6 bg-gray-900 rounded-xl p-8 border border-gray-800">
+          <h3 class="font-semibold mb-2">Claude Code — Manual Hook (Alternative)</h3>
+          <p class="text-gray-400 mb-4">
+            If you prefer manual setup, add the <code class="bg-gray-800 px-2 py-1 rounded text-sm">hooks</code> key to your
+            <code class="bg-gray-800 px-2 py-1 rounded text-sm">.claude/settings.json</code>:
           </p>
 
           <div class="relative">
@@ -454,10 +483,6 @@
               {copiedHook ? 'Copied' : 'Copy'}
             </button>
           </div>
-
-          <p class="text-sm text-gray-500 mt-3">
-            That's it. Clash will prompt you whenever Claude tries to edit a file that conflicts with another worktree.
-          </p>
         </div>
 
         <!-- What Your Agent Sees -->
