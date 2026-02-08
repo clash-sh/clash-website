@@ -79,7 +79,7 @@
           <div class="flex justify-center gap-3 mb-8 flex-wrap">
             <img src="https://img.shields.io/badge/License-MIT-blue.svg" alt="MIT License" class="h-5" />
             <img src="https://img.shields.io/badge/Rust-1.93+-orange.svg" alt="Rust 1.93+" class="h-5" />
-            <img src="https://img.shields.io/crates/v/clash-sh.svg" alt="crates.io version" class="h-5" />
+            <img src="https://img.shields.io/github/v/release/clash-sh/clash" alt="version" class="h-5" />
           </div>
 
           <!-- CTAs -->
