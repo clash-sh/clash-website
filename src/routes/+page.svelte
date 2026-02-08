@@ -2,32 +2,28 @@
   import { onMount } from 'svelte';
 
   let isVisible = false;
-  let copied = false;
-  let copiedBrew = false;
   let copiedHook = false;
   let copiedPlugin = false;
-  let scrolled = false;
+  let copiedInstall = false;
+
+  // Tab state
+  let activeInstallTab = 'brew';
+  let activeAgentTab = 'plugin';
+
+  const installCommands = {
+    brew: 'brew install clash-sh/tap/clash',
+    shell: 'curl -fsSL https://clash.sh/install.sh | sh',
+    cargo: 'cargo install clash-sh',
+  };
 
   onMount(() => {
     isVisible = true;
-
-    const onScroll = () => {
-      scrolled = window.scrollY > 400;
-    };
-    window.addEventListener('scroll', onScroll, { passive: true });
-    return () => window.removeEventListener('scroll', onScroll);
   });
 
-  function copyInstallCommand() {
-    navigator.clipboard.writeText('curl -fsSL https://clash.sh/install.sh | sh');
-    copied = true;
-    setTimeout(() => copied = false, 2000);
-  }
-
-  function copyBrewCommand() {
-    navigator.clipboard.writeText('brew install clash-sh/tap/clash');
-    copiedBrew = true;
-    setTimeout(() => copiedBrew = false, 2000);
+  function copyActiveInstall() {
+    navigator.clipboard.writeText(installCommands[activeInstallTab]);
+    copiedInstall = true;
+    setTimeout(() => copiedInstall = false, 2000);
   }
 
   const hookConfig = `{
@@ -63,27 +59,6 @@
   <title>Clash - Avoid merge conflicts across git worktrees for parallel AI coding agents</title>
 </svelte:head>
 
-<!-- Sticky Navigation -->
-{#if scrolled}
-<nav class="fixed top-0 left-0 right-0 z-50 bg-gray-950/80 backdrop-blur-lg border-b border-gray-800/50 animate-slide-up">
-  <div class="container mx-auto px-6 h-12 flex items-center justify-between">
-    <!-- svelte-ignore a11y-invalid-attribute -->
-    <a href="#" class="flex items-center gap-2">
-      <img src="/logo.png" alt="Clash" class="w-6 h-6" />
-      <span class="font-semibold text-sm text-white">Clash</span>
-    </a>
-    <div class="hidden sm:flex items-center gap-5 text-sm text-gray-400">
-      <a href="#demos" class="hover:text-white transition">Demos</a>
-      <a href="#getting-started" class="hover:text-white transition">Getting Started</a>
-      <a href="#commands" class="hover:text-white transition">Commands</a>
-      <a href="#use-cases" class="hover:text-white transition">Use Cases</a>
-      <a href="#how-it-works" class="hover:text-white transition">How It Works</a>
-      <a href="#faq" class="hover:text-white transition">FAQ</a>
-    </div>
-  </div>
-</nav>
-{/if}
-
 <main class="min-h-screen bg-gradient-to-b from-gray-950 to-black text-gray-100">
   {#if isVisible}
   <div class="animate-slide-up">
@@ -107,50 +82,18 @@
             <img src="https://img.shields.io/badge/Status-v0.1.0-yellow.svg" alt="v0.1.0" class="h-5" />
           </div>
 
-          <!-- Installation -->
-          <div class="max-w-3xl mx-auto mb-8 px-4 sm:px-0">
-            <!-- Homebrew -->
-            <div class="bg-gray-900/50 backdrop-blur rounded-xl p-4 border border-gray-800 mb-3">
-              <p class="text-xs text-gray-500 mb-2 uppercase tracking-wider">Install via Homebrew</p>
-              <div class="flex flex-col sm:flex-row items-stretch sm:items-center gap-2">
-                <code class="flex-1 bg-black/50 px-3 py-2 rounded-lg font-mono text-xs sm:text-sm text-gray-300 overflow-x-auto">
-                  brew install clash-sh/tap/clash
-                </code>
-                <button
-                  on:click={copyBrewCommand}
-                  class="px-3 py-2 bg-gray-800 hover:bg-gray-700 rounded-lg transition-colors text-sm whitespace-nowrap"
-                >
-                  {copiedBrew ? 'Copied' : 'Copy'}
-                </button>
-              </div>
-            </div>
-
-            <!-- OR divider -->
-            <div class="text-center text-gray-600 text-sm mb-3">or</div>
-
-            <!-- Shell Script -->
-            <div class="bg-gray-900/50 backdrop-blur rounded-xl p-4 border border-gray-800">
-              <p class="text-xs text-gray-500 mb-2 uppercase tracking-wider">Install via Shell Script</p>
-              <div class="flex flex-col sm:flex-row items-stretch sm:items-center gap-2">
-                <code class="flex-1 bg-black/50 px-3 py-2 rounded-lg font-mono text-xs sm:text-sm text-gray-300 overflow-x-auto">
-                  curl -fsSL https://clash.sh/install.sh | sh
-                </code>
-                <button
-                  on:click={copyInstallCommand}
-                  class="px-3 py-2 bg-gray-800 hover:bg-gray-700 rounded-lg transition-colors text-sm whitespace-nowrap"
-                >
-                  {copied ? 'Copied' : 'Copy'}
-                </button>
-              </div>
-            </div>
-          </div>
-
           <!-- CTAs -->
           <div class="flex flex-col sm:flex-row flex-wrap justify-center gap-3 px-4 sm:px-0">
             <a
+              href="#getting-started"
+              class="inline-flex items-center justify-center gap-2 px-6 py-2.5 bg-white text-black font-semibold rounded-lg hover:bg-gray-200 transition-colors text-sm sm:text-base"
+            >
+              Get Started
+            </a>
+            <a
               href="https://github.com/clash-sh/clash"
               target="_blank"
-              class="inline-flex items-center justify-center gap-2 px-5 py-2.5 bg-white text-black font-semibold rounded-lg hover:bg-gray-200 transition-colors text-sm sm:text-base"
+              class="inline-flex items-center justify-center gap-2 px-5 py-2.5 border border-gray-700 rounded-lg hover:bg-gray-900 transition-colors font-semibold text-sm sm:text-base"
             >
               <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24">
                 <path d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z"/>
@@ -162,13 +105,6 @@
               class="px-5 py-2.5 border border-gray-700 rounded-lg hover:bg-gray-900 transition-colors font-semibold text-sm sm:text-base text-center"
             >
               Watch Demo
-            </a>
-            <a
-              href="https://github.com/clash-sh/clash/blob/main/README.md"
-              target="_blank"
-              class="px-5 py-2.5 border border-gray-700 rounded-lg hover:bg-gray-900 transition-colors font-semibold text-sm sm:text-base text-center"
-            >
-              Documentation
             </a>
           </div>
         </div>
@@ -376,69 +312,77 @@
         <h2 class="text-3xl font-bold mb-10 text-center">Getting Started</h2>
 
         <!-- Step 1: Install Clash -->
-        <div class="mb-8">
-          <div class="flex items-center gap-3 mb-4">
-            <span class="w-8 h-8 rounded-full bg-purple-500/15 border border-purple-500/30 flex items-center justify-center text-purple-400 text-sm font-bold flex-shrink-0">1</span>
-            <h3 class="text-xl font-semibold">Install Clash</h3>
+        <div class="mb-10">
+          <h3 class="text-xl font-semibold mb-4">1. Install Clash</h3>
+
+          <!-- Tabs -->
+          <div class="flex gap-1 mb-4 bg-gray-900/50 rounded-lg p-1 w-fit">
+            <button
+              on:click={() => { activeInstallTab = 'brew'; copiedInstall = false; }}
+              class="px-4 py-2 rounded-md text-sm font-medium transition-colors {activeInstallTab === 'brew' ? 'bg-gray-800 text-white' : 'text-gray-400 hover:text-gray-200'}"
+            >
+              Homebrew
+            </button>
+            <button
+              on:click={() => { activeInstallTab = 'shell'; copiedInstall = false; }}
+              class="px-4 py-2 rounded-md text-sm font-medium transition-colors {activeInstallTab === 'shell' ? 'bg-gray-800 text-white' : 'text-gray-400 hover:text-gray-200'}"
+            >
+              Shell Script
+            </button>
+            <button
+              on:click={() => { activeInstallTab = 'cargo'; copiedInstall = false; }}
+              class="px-4 py-2 rounded-md text-sm font-medium transition-colors {activeInstallTab === 'cargo' ? 'bg-gray-800 text-white' : 'text-gray-400 hover:text-gray-200'}"
+            >
+              Cargo
+            </button>
           </div>
 
-          <div class="grid md:grid-cols-3 gap-4 ml-11">
-            <div class="bg-gray-900 rounded-lg p-6 border border-gray-800 hover:border-cyan-800/50 transition-colors">
-              <div class="flex items-center gap-3 mb-3">
-                <div class="w-8 h-8 rounded-lg bg-cyan-500/10 border border-cyan-500/20 flex items-center justify-center">
-                  <svg class="w-4 h-4 text-cyan-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z" />
-                  </svg>
-                </div>
-                <h4 class="font-semibold">Quick Install</h4>
-              </div>
-              <code class="text-xs bg-black/50 px-3 py-2 rounded block text-gray-300">
-                curl -fsSL https://clash.sh/install.sh | sh
-              </code>
-            </div>
-
-            <div class="bg-gray-900 rounded-lg p-6 border border-gray-800 hover:border-amber-800/50 transition-colors">
-              <div class="flex items-center gap-3 mb-3">
-                <div class="w-8 h-8 rounded-lg bg-amber-500/10 border border-amber-500/20 flex items-center justify-center">
-                  <svg class="w-4 h-4 text-amber-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4" />
-                  </svg>
-                </div>
-                <h4 class="font-semibold">Homebrew</h4>
-              </div>
-              <code class="text-xs bg-black/50 px-3 py-2 rounded block text-gray-300">
-                brew install clash-sh/tap/clash
-              </code>
-            </div>
-
-            <div class="bg-gray-900 rounded-lg p-6 border border-gray-800 hover:border-orange-800/50 transition-colors">
-              <div class="flex items-center gap-3 mb-3">
-                <div class="w-8 h-8 rounded-lg bg-orange-500/10 border border-orange-500/20 flex items-center justify-center">
-                  <svg class="w-4 h-4 text-orange-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.066 2.573c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.573 1.066c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.066-2.573c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z" />
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
-                  </svg>
-                </div>
-                <h4 class="font-semibold">Cargo</h4>
-              </div>
-              <code class="text-xs bg-black/50 px-3 py-2 rounded block text-gray-300">
-                cargo install clash-sh
-              </code>
+          <!-- Code block -->
+          <div class="bg-gray-900 rounded-xl border border-gray-800">
+            <div class="flex items-center justify-between px-4 py-3">
+              <code class="font-mono text-sm text-gray-300">{installCommands[activeInstallTab]}</code>
+              <button
+                on:click={copyActiveInstall}
+                class="px-3 py-1.5 bg-gray-800 hover:bg-gray-700 rounded-lg transition-colors text-xs flex-shrink-0 ml-4"
+              >
+                {copiedInstall ? 'Copied' : 'Copy'}
+              </button>
             </div>
           </div>
         </div>
 
-        <!-- Step 2: Set Up Your AI Agent -->
-        <div class="mb-8">
-          <div class="flex items-center gap-3 mb-4">
-            <span class="w-8 h-8 rounded-full bg-blue-500/15 border border-blue-500/30 flex items-center justify-center text-blue-400 text-sm font-bold flex-shrink-0">2</span>
-            <h3 class="text-xl font-semibold">Set Up Your AI Agent</h3>
+        <!-- Step 2: Connect to your AI agent -->
+        <div class="mb-10">
+          <h3 class="text-xl font-semibold mb-4">2. Connect to your AI agent</h3>
+
+          <!-- Tabs -->
+          <div class="flex gap-1 mb-4 bg-gray-900/50 rounded-lg p-1 w-fit">
+            <button
+              on:click={() => activeAgentTab = 'plugin'}
+              class="px-4 py-2 rounded-md text-sm font-medium transition-colors {activeAgentTab === 'plugin' ? 'bg-gray-800 text-white' : 'text-gray-400 hover:text-gray-200'}"
+            >
+              Claude Code Plugin
+            </button>
+            <button
+              on:click={() => activeAgentTab = 'hook'}
+              class="px-4 py-2 rounded-md text-sm font-medium transition-colors {activeAgentTab === 'hook' ? 'bg-gray-800 text-white' : 'text-gray-400 hover:text-gray-200'}"
+            >
+              Manual Hook
+            </button>
+            <button
+              on:click={() => activeAgentTab = 'other'}
+              class="px-4 py-2 rounded-md text-sm font-medium transition-colors {activeAgentTab === 'other' ? 'bg-gray-800 text-white' : 'text-gray-400 hover:text-gray-200'}"
+            >
+              Other Agents
+            </button>
           </div>
 
-          <div class="ml-11 space-y-6">
-            <!-- Claude Code Plugin (Recommended) -->
-            <div class="bg-gray-900 rounded-xl p-8 border border-gray-800">
-              <h4 class="font-semibold mb-2">Claude Code — Plugin (Recommended)</h4>
+          <!-- Tab content -->
+          {#if activeAgentTab === 'plugin'}
+            <div class="bg-gray-900 rounded-xl p-6 border border-gray-800">
+              <div class="flex items-center gap-2 mb-3">
+                <span class="text-xs bg-green-950/50 text-green-400 px-2 py-0.5 rounded border border-green-900/50">Recommended</span>
+              </div>
               <p class="text-gray-400 mb-4">
                 Install the Clash plugin — it automatically checks for conflicts before every Write/Edit:
               </p>
@@ -458,12 +402,10 @@
                 That's it. Clash will prompt you whenever Claude tries to edit a file that conflicts with another worktree.
               </p>
             </div>
-
-            <!-- Manual Hook (Alternative) -->
-            <div class="bg-gray-900 rounded-xl p-8 border border-gray-800">
-              <h4 class="font-semibold mb-2">Claude Code — Manual Hook (Alternative)</h4>
+          {:else if activeAgentTab === 'hook'}
+            <div class="bg-gray-900 rounded-xl p-6 border border-gray-800">
               <p class="text-gray-400 mb-4">
-                If you prefer manual setup, add the <code class="bg-gray-800 px-2 py-1 rounded text-sm">hooks</code> key to your
+                Add the <code class="bg-gray-800 px-2 py-1 rounded text-sm">hooks</code> key to your
                 <code class="bg-gray-800 px-2 py-1 rounded text-sm">.claude/settings.json</code>:
               </p>
 
@@ -491,13 +433,11 @@
                 </button>
               </div>
             </div>
-
-            <!-- Other Agents (Manual) -->
-            <div class="bg-gray-900 rounded-xl p-8 border border-gray-800">
-              <h4 class="font-semibold mb-2">Codex / Cursor / Windsurf / Other Agents</h4>
+          {:else}
+            <div class="bg-gray-900 rounded-xl p-6 border border-gray-800">
               <p class="text-gray-400 mb-4">
-                If hooks aren't available, add to your project instructions
-                (<code class="bg-gray-800 px-2 py-1 rounded text-sm">.cursorrules</code>, etc.):
+                Add to your project instructions
+                (<code class="bg-gray-800 px-2 py-1 rounded text-sm">.cursorrules</code>, <code class="bg-gray-800 px-2 py-1 rounded text-sm">AGENTS.md</code>, etc.):
               </p>
 
               <div class="bg-black/50 rounded-lg p-4 text-sm text-gray-400 font-mono space-y-2">
@@ -505,34 +445,26 @@
                 <p>Run <code class="text-gray-300">`clash status`</code> periodically (especially before and after commits) to get a full conflict overview across all worktrees.</p>
               </div>
             </div>
-          </div>
+          {/if}
         </div>
 
-        <!-- Step 3: Done -->
-        <div>
-          <div class="flex items-center gap-3 mb-4">
-            <span class="w-8 h-8 rounded-full bg-green-500/15 border border-green-500/30 flex items-center justify-center text-green-400 text-sm font-bold flex-shrink-0">3</span>
-            <h3 class="text-xl font-semibold">You're All Set</h3>
-          </div>
+        <!-- What Your Agent Sees -->
+        <div class="mb-8">
+          <h3 class="text-lg font-semibold mb-4">What Your Agent Sees</h3>
+          <p class="text-gray-400 mb-4">
+            When conflicts are detected, <code class="bg-gray-800 px-2 py-1 rounded text-sm">clash check</code> returns structured JSON:
+          </p>
 
-          <div class="ml-11">
-            <!-- What Your Agent Sees -->
-            <div class="bg-gray-900 rounded-xl p-8 border border-gray-800">
-              <h4 class="font-semibold mb-2">What Your Agent Sees</h4>
-              <p class="text-gray-400 mb-4">
-                When conflicts are detected, <code class="bg-gray-800 px-2 py-1 rounded text-sm">clash check</code> returns structured JSON:
-              </p>
-
-              <div class="rounded-xl overflow-hidden border border-gray-800 bg-black">
-                <div class="bg-gray-900 px-4 py-2 border-b border-gray-800">
-                  <div class="flex items-center gap-2">
-                    <div class="w-3 h-3 rounded-full bg-red-500"></div>
-                    <div class="w-3 h-3 rounded-full bg-yellow-500"></div>
-                    <div class="w-3 h-3 rounded-full bg-green-500"></div>
-                    <span class="ml-2 text-sm text-gray-400">clash check src/main.rs</span>
-                  </div>
-                </div>
-                <pre class="p-4 text-sm overflow-x-auto font-mono"><code><span class="text-gray-500">&#123;</span>
+          <div class="rounded-xl overflow-hidden border border-gray-800 bg-black">
+            <div class="bg-gray-900 px-4 py-2 border-b border-gray-800">
+              <div class="flex items-center gap-2">
+                <div class="w-3 h-3 rounded-full bg-red-500"></div>
+                <div class="w-3 h-3 rounded-full bg-yellow-500"></div>
+                <div class="w-3 h-3 rounded-full bg-green-500"></div>
+                <span class="ml-2 text-sm text-gray-400">clash check src/main.rs</span>
+              </div>
+            </div>
+            <pre class="p-4 text-sm overflow-x-auto font-mono"><code><span class="text-gray-500">&#123;</span>
   <span class="text-purple-400">"file"</span><span class="text-gray-500">:</span> <span class="text-green-400">"src/main.rs"</span><span class="text-gray-500">,</span>
   <span class="text-purple-400">"has_conflicts"</span><span class="text-gray-500">:</span> <span class="text-amber-400">true</span><span class="text-gray-500">,</span>
   <span class="text-purple-400">"conflicts"</span><span class="text-gray-500">:</span> <span class="text-gray-500">[</span>
@@ -542,27 +474,25 @@
     <span class="text-gray-500">&#125;</span>
   <span class="text-gray-500">]</span>
 <span class="text-gray-500">&#125;</span></code></pre>
-              </div>
-
-              <div class="mt-4 flex flex-wrap gap-3 text-xs font-mono">
-                <span class="bg-green-950/50 text-green-400 px-3 py-1.5 rounded-lg border border-green-900/50">Exit 0 — no conflicts</span>
-                <span class="bg-amber-950/50 text-amber-400 px-3 py-1.5 rounded-lg border border-amber-900/50">Exit 2 — conflicts found</span>
-                <span class="bg-red-950/50 text-red-400 px-3 py-1.5 rounded-lg border border-red-900/50">Exit 1 — error</span>
-              </div>
-            </div>
-
-            <!-- Multiple Agents Demo -->
-            <div class="mt-6 rounded-xl overflow-hidden border border-gray-800">
-              <img
-                src="/demos/multi-agent-clash-demo-v1.gif"
-                alt="Multiple agents working with Clash"
-                class="w-full"
-              />
-              <p class="text-center text-base text-gray-400 mt-3">
-                Multiple AI agents coordinating across worktrees with Clash
-              </p>
-            </div>
           </div>
+
+          <div class="mt-4 flex flex-wrap gap-3 text-xs font-mono">
+            <span class="bg-green-950/50 text-green-400 px-3 py-1.5 rounded-lg border border-green-900/50">Exit 0 — no conflicts</span>
+            <span class="bg-amber-950/50 text-amber-400 px-3 py-1.5 rounded-lg border border-amber-900/50">Exit 2 — conflicts found</span>
+            <span class="bg-red-950/50 text-red-400 px-3 py-1.5 rounded-lg border border-red-900/50">Exit 1 — error</span>
+          </div>
+        </div>
+
+        <!-- Multiple Agents Demo -->
+        <div class="rounded-xl overflow-hidden border border-gray-800">
+          <img
+            src="/demos/multi-agent-clash-demo-v1.gif"
+            alt="Multiple agents working with Clash"
+            class="w-full"
+          />
+          <p class="text-center text-base text-gray-400 mt-3 mb-3">
+            Multiple AI agents coordinating across worktrees with Clash
+          </p>
         </div>
       </div>
     </section>
