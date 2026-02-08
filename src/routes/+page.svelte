@@ -252,8 +252,8 @@
               class="w-full"
             />
           </div>
-          <p class="text-center text-sm text-gray-500 mt-3">
-            Zero-config conflict detection — Clash prompts you before a conflicting edit goes through
+          <p class="text-center text-base text-gray-400 mt-3">
+            Automatic conflict detection — Clash prompts you before a conflicting edit goes through
           </p>
         </div>
 
@@ -418,7 +418,7 @@
             alt="Multiple agents working with Clash"
             class="w-full"
           />
-          <p class="text-center text-sm text-gray-500 mt-3">
+          <p class="text-center text-base text-gray-400 mt-3">
             Multiple AI agents coordinating across worktrees with Clash
           </p>
         </div>
